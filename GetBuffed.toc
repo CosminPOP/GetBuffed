@@ -1,7 +1,7 @@
 ## Interface: 11200
 ## Title: Get Buffed!
 ## Author: Xerron/Er
-## Version: 0.3
+## Version: 0.4
 ## Notes: Smultron Edition
 ## SavedVariablesPerCharacter: GB_BUFFS
 GetBuffed.xml

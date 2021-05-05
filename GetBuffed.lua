@@ -41,7 +41,7 @@ GB:SetScript("OnEvent", function()
                 GB_BUFFS = {}
             end
             getglobal('GBMain'):SetBackdropColor(0, 0, 0, .5)
-            getglobal('GBSettings'):SetBackdropColor(0, 0, 0, .5)
+            getglobal('GBSettings'):SetBackdropColor(0, 0, 0, .7)
             GB.cacheItems()
             GBScanner:Show()
         end
@@ -84,8 +84,8 @@ function GB.populateSettings()
     local i = 0;
     local left = 10
     local top = i
-    local rowLimit = 23
-    local secondRowLimit = 41
+    local rowLimit = 22
+    local secondRowLimit = 40
     for _, data in next, GB.consumables do
 
         i = i + 1
@@ -164,7 +164,25 @@ function GB.checkMyBuffs()
     --DEFAULT_CHAT_FRAME:AddMessage('----------')
 
     for j = 0, 32 do
-        local buffName, duration = GB.GetUnitBuff(j)
+        local buffName, duration = GB.GetUnitBuffOrDebuff(j)
+
+        if buffName then
+            for _, data in next, GB.consumables do
+                if buffName == data.name then
+                    if GB_BUFFS[data.id] then
+                        if GB_BUFFS[data.id] == '1' then
+                            currentBuffs = currentBuffs + 1
+                            foundBuffs[data.id] = duration
+                            --DEFAULT_CHAT_FRAME:AddMessage(buffName .. ' ' .. duration)
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    for j = 0, 16 do
+        local buffName, duration = GB.GetUnitBuffOrDebuff(j, true)
 
         if buffName then
             for _, data in next, GB.consumables do
@@ -348,12 +366,12 @@ GB.consumables = {
     { name = 'Supreme Power', itemLink = '\124cffffffff\124Hitem:13512:0:0:0:0:0:0:0:0\124h[Flask of Supreme Power]\124h\124r' },
     { name = 'Chromatic Resistance', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
 
-    { name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
+    { name = 'separator', itemLink = '\124cffffffff\124Hitem:1:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
 
     { name = 'Spirit of Zanza', itemLink = '\124cff1eff00\124Hitem:20079:0:0:0:0:0:0:0:0\124h[Spirit of Zanza]\124h\124r' },
     { name = 'Swiftness of Zanza', itemLink = '\124cff1eff00\124Hitem:20081:0:0:0:0:0:0:0:0\124h[Swiftness of Zanza]\124h\124r' },
 
-    { name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
+    { name = 'separator', itemLink = '\124cffffffff\124Hitem:2:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
 
     { name = 'Rage of Ages', itemLink = "\124cffffffff\124Hitem:8410:0:0:0:0:0:0:0:0\124h[R.O.I.D.S.]\124h\124r" },
     { name = 'Strike of the Scorpok', itemLink = "\124cffffffff\124Hitem:8412:0:0:0:0:0:0:0:0\124h[Ground Scorpok Assay]\124h\124r" },
@@ -361,45 +379,45 @@ GB.consumables = {
     { name = 'Spiritual Domination', itemLink = "\124cffffffff\124Hitem:8424:0:0:0:0:0:0:0:0\124h[Gizzard Gum]\124h\124r" },
     { name = 'Spirit of Boar', itemLink = "\124cffffffff\124Hitem:8411:0:0:0:0:0:0:0:0\124h[Lung Juice Cocktail]\124h\124r" },
 
-    { name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
+    { name = 'separator', itemLink = '\124cffffffff\124Hitem:3:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
 
     { name = 'Juju Power', itemLink = "\124cffffffff\124Hitem:12451:0:0:0:0:0:0:0:0\124h[Juju Power]\124h\124r" },
     { name = 'Juju Might', itemLink = "\124cffffffff\124Hitem:12460:0:0:0:0:0:0:0:0\124h[Juju Might]\124h\124r" },
     { name = 'Juju Ember', itemLink = "\124cffffffff\124Hitem:12455:0:0:0:0:0:0:0:0\124h[Juju Ember]\124h\124r" },
     { name = 'Juju Chill', itemLink = "\124cffffffff\124Hitem:12457:0:0:0:0:0:0:0:0\124h[Juju Chill]\124h\124r" },
 
-    { name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
+    { name = 'separator', itemLink = '\124cffffffff\124Hitem:4:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
 
-    { name = 'Armor', itemLink = "\124cffffffff\124Hitem:8951:0:0:0:0:0:0:0:0\124h[Elixir of Greater Defense]\124h\124r" },
     { name = 'Greater Armor', itemLink = "\124cffffffff\124Hitem:13445:0:0:0:0:0:0:0:0\124h[Elixir of Superior Defense]\124h\124r" },
 
-    { name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
+    { name = 'separator', itemLink = '\124cffffffff\124Hitem:5:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
+
+    { name = 'Winterfall Firewater', itemLink = "\124cffffffff\124Hitem:12820:0:0:0:0:0:0:0:0\124h[Winterfall Firewater]\124h\124r" },
+
+    { name = 'separator', itemLink = '\124cffffffff\124Hitem:6:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
 
     { name = 'Elixir of the Mongoose', itemLink = "\124cffffffff\124Hitem:13452:0:0:0:0:0:0:0:0\124h[Elixir of the Mongoose]\124h\124r" },
     { name = 'Elixir of Giants', itemLink = "\124cffffffff\124Hitem:9206:0:0:0:0:0:0:0:0\124h[Elixir of Giants]\124h\124r" },
-    { name = 'Winterfall Firewater', itemLink = "\124cffffffff\124Hitem:12820:0:0:0:0:0:0:0:0\124h[Winterfall Firewater]\124h\124r" },
     { name = 'Greater Agility', itemLink = "\124cffffffff\124Hitem:9187:0:0:0:0:0:0:0:0\124h[Elixir of Greater Agility]\124h\124r" },
     { name = 'Health II', itemLink = "\124cffffffff\124Hitem:3825:0:0:0:0:0:0:0:0\124h[Elixir of Fortitude]\124h\124r" },
-
-    { name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
-
-    { name = 'Regeneration', itemLink = "\124cffffffff\124Hitem:20004:0:0:0:0:0:0:0:0\124h[Major Troll's Blood Potion]\124h\124r" },
-    { name = 'Gift of Arthas', itemLink = "\124cffffffff\124Hitem:9088:0:0:0:0:0:0:0:0\124h[Gift of Arthas]\124h\124r" },
-    { name = 'Mana Regeneration', itemLink = "\124cffffffff\124Hitem:20007:0:0:0:0:0:0:0:0\124h[Mageblood Potion]\124h\124r" },
-
-    { name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
 
     { name = 'Greater Arcane Elixir', itemLink = "\124cffffffff\124Hitem:13454:0:0:0:0:0:0:0:0\124h[Greater Arcane Elixir]\124h\124r" },
     { name = 'Shadow Power', itemLink = "\124cffffffff\124Hitem:9264:0:0:0:0:0:0:0:0\124h[Elixir of Shadow Power]\124h\124r" }, --Elixir of Shadow Power
     { name = 'Greater Firepower', itemLink = "\124cffffffff\124Hitem:21546:0:0:0:0:0:0:0:0\124h[Elixir of Greater Firepower]\124h\124r" },
     { name = 'Frost Power', itemLink = "\124cffffffff\124Hitem:17708:0:0:0:0:0:0:0:0\124h[Elixir of Frost Power]\124h\124r" },
 
-    { name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
+    { name = 'separator', itemLink = '\124cffffffff\124Hitem:7:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
+
+    { name = 'Gift of Arthas', itemLink = "\124cffffffff\124Hitem:9088:0:0:0:0:0:0:0:0\124h[Gift of Arthas]\124h\124r" },
+    { name = 'Regeneration', itemLink = "\124cffffffff\124Hitem:20004:0:0:0:0:0:0:0:0\124h[Major Troll's Blood Potion]\124h\124r" },
+    { name = 'Mana Regeneration', itemLink = "\124cffffffff\124Hitem:20007:0:0:0:0:0:0:0:0\124h[Mageblood Potion]\124h\124r" },
+
+    { name = 'separator', itemLink = '\124cffffffff\124Hitem:8:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
 
     { name = 'Crystal Ward', itemLink = "\124cffffffff\124Hitem:11564:0:0:0:0:0:0:0:0\124h[Crystal Ward]\124h\124r" },
     { name = 'Crystal Spire', itemLink = "\124cffffffff\124Hitem:11567:0:0:0:0:0:0:0:0\124h[Crystal Spire]\124h\124r" },
 
-    { name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
+    { name = 'separator', itemLink = '\124cffffffff\124Hitem:9:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
 
     { name = 'Arcane Protection', itemLink = "\124cffffffff\124Hitem:13461:0:0:0:0:0:0:0:0\124h[Greater Arcane Protection Potion]\124h\124r" }, --Greater
     { name = 'Fire Protection', itemLink = "\124cffffffff\124Hitem:13457:0:0:0:0:0:0:0:0\124h[Greater Fire Protection Potion]\124h\124r" }, --Greater
@@ -407,7 +425,7 @@ GB.consumables = {
     { name = 'Nature Protection', itemLink = "\124cffffffff\124Hitem:13458:0:0:0:0:0:0:0:0\124h[Greater Nature Protection Potion]\124h\124r" }, --Greater
     { name = 'Shadow Protection', itemLink = "\124cffffffff\124Hitem:13459:0:0:0:0:0:0:0:0\124h[Greater Shadow Protection Potion]\124h\124r" }, --Greater
 
-    { name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
+    { name = 'separator', itemLink = '\124cffffffff\124Hitem:10:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
 
     { name = 'Mana Regeneration', itemLink = "\124cffffffff\124Hitem:13931:0:0:0:0:0:0:0:0\124h[Nightfin Soup]\124h\124r" }, -- conflict with mageblood
     { name = 'Increased Intellect', itemLink = "\124cffffffff\124Hitem:18254:0:0:0:0:0:0:0:0\124h[Runn Tum Tuber Surprise]\124h\124r" },
@@ -421,6 +439,7 @@ GB.consumables = {
     { name = 'Dragonbreath Chili', itemLink = "\124cffffffff\124Hitem:12217:0:0:0:0:0:0:0:0\124h[Dragonbreath Chili]\124h\124r" },
     { name = 'Rumsey Rum Black Label', itemLink = "\124cffffffff\124Hitem:21151:0:0:0:0:0:0:0:0\124h[Rumsey Rum Black Label]\124h\124r" },
     { name = 'Gordok Green Grog', itemLink = "\124cff1eff00\124Hitem:18269:0:0:0:0:0:0:0:0\124h[Gordok Green Grog]\124h\124r" },
+    { name = 'Kreeg\'s Stout Beatdown', itemLink = "\124cff1eff00\124Hitem:18284:0:0:0:0:0:0:0:0\124h[Kreeg's Stout Beatdown]\124h\124r" },
 
 }
 
@@ -471,9 +490,14 @@ function GB.addButtonOnEnterTooltip(frame, itemLink)
     end)
 end
 
-function GB.GetUnitBuff(i)
+function GB.GetUnitBuffOrDebuff(i, debuff)
     GBToolTip:SetOwner(GBToolTip, "ANCHOR_NONE");
-    GBToolTip:SetUnitBuff('player', i + 1)
+    if debuff then
+        GBToolTip:SetUnitDebuff('player', i + 1)
+    else
+        GBToolTip:SetUnitBuff('player', i + 1)
+    end
+
 
     if GBToolTipTextLeft1:GetText() then
         local duration = GetPlayerBuffTimeLeft(GetPlayerBuff(i, "HELPFUL|HARMFUL|PASSIVE"))
