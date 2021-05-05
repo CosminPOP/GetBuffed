@@ -62,8 +62,8 @@ function GB.populateSettings()
     local i = 0;
     local left = 10
     local top = i
-    local rowLimit = 22
-    local secondRowLimit = 40
+    local rowLimit = 23
+    local secondRowLimit = 41
     for _, data in next, GB.consumables do
 
         i = i + 1
@@ -101,10 +101,10 @@ function GB.populateSettings()
 
         if GB_BUFFS[data.id] == '1' then
             settingsBuffs = settingsBuffs + 1
-            SetDesaturation(getglobal("sBuff" .. i .. 'Item'):GetNormalTexture(), 0)
+            --SetDesaturation(getglobal("sBuff" .. i .. 'Item'):GetNormalTexture(), 0)
             getglobal("sBuff" .. i .. 'ItemName'):SetText('|cffffffff' .. name)
         else
-            SetDesaturation(getglobal("sBuff" .. i .. 'Item'):GetNormalTexture(), 1)
+            --SetDesaturation(getglobal("sBuff" .. i .. 'Item'):GetNormalTexture(), 1)
             getglobal("sBuff" .. i .. 'ItemName'):SetText('|cff888888' .. name)
         end
 
@@ -222,10 +222,10 @@ function markWatched(id, check)
 
     if check then
         getglobal("sBuff" .. id .. 'ItemName'):SetText('|cffffffff' .. name)
-        SetDesaturation(getglobal("sBuff" .. id .. 'Item'):GetNormalTexture(), 0)
+        --SetDesaturation(getglobal("sBuff" .. id .. 'Item'):GetNormalTexture(), 0)
     else
         getglobal("sBuff" .. id .. 'ItemName'):SetText('|cff888888' .. name)
-        SetDesaturation(getglobal("sBuff" .. id .. 'Item'):GetNormalTexture(), 1)
+        --SetDesaturation(getglobal("sBuff" .. id .. 'Item'):GetNormalTexture(), 1)
     end
 
     local settingsBuffs = 0
@@ -303,85 +303,90 @@ function GBSettingsButton_OnClick()
 end
 
 GB.consumables = {
-    { id = 1, name = 'Flask of the Titans', itemLink = '\124cffffffff\124Hitem:13510:0:0:0:0:0:0:0:0\124h[Flask of the Titans]\124h\124r' },
-    { id = 2, name = 'Distilled Wisdom', itemLink = '\124cffffffff\124Hitem:13511:0:0:0:0:0:0:0:0\124h[Flask of Distilled Wisdom]\124h\124r' },
-    { id = 3, name = 'Supreme Power', itemLink = '\124cffffffff\124Hitem:13512:0:0:0:0:0:0:0:0\124h[Flask of Supreme Power]\124h\124r' },
-    { id = 4, name = 'Chromatic Resistance', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
+    { name = 'Flask of the Titans', itemLink = '\124cffffffff\124Hitem:13510:0:0:0:0:0:0:0:0\124h[Flask of the Titans]\124h\124r' },
+    { name = 'Distilled Wisdom', itemLink = '\124cffffffff\124Hitem:13511:0:0:0:0:0:0:0:0\124h[Flask of Distilled Wisdom]\124h\124r' },
+    { name = 'Supreme Power', itemLink = '\124cffffffff\124Hitem:13512:0:0:0:0:0:0:0:0\124h[Flask of Supreme Power]\124h\124r' },
+    { name = 'Chromatic Resistance', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
 
-    { id = 5, name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
+    { name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
 
-    { id = 6, name = 'Spirit of Zanza', itemLink = '\124cff1eff00\124Hitem:20079:0:0:0:0:0:0:0:0\124h[Spirit of Zanza]\124h\124r' },
-    { id = 7, name = 'Swiftness of Zanza', itemLink = '\124cff1eff00\124Hitem:20081:0:0:0:0:0:0:0:0\124h[Swiftness of Zanza]\124h\124r' },
+    { name = 'Spirit of Zanza', itemLink = '\124cff1eff00\124Hitem:20079:0:0:0:0:0:0:0:0\124h[Spirit of Zanza]\124h\124r' },
+    { name = 'Swiftness of Zanza', itemLink = '\124cff1eff00\124Hitem:20081:0:0:0:0:0:0:0:0\124h[Swiftness of Zanza]\124h\124r' },
 
-    { id = 8, name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
+    { name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
 
-    { id = 9, name = 'Strike of the Scorpok', itemLink = "\124cffffffff\124Hitem:8412:0:0:0:0:0:0:0:0\124h[Ground Scorpok Assay]\124h\124r" },
-    { id = 10, name = 'Infallible Mind', itemLink = "\124cffffffff\124Hitem:8423:0:0:0:0:0:0:0:0\124h[Cerebral Cortex Compound]\124h\124r" },
-    { id = 11, name = 'Spiritual Domination', itemLink = "\124cffffffff\124Hitem:8424:0:0:0:0:0:0:0:0\124h[Gizzard Gum]\124h\124r" },
-    { id = 12, name = 'Spirit of Boar', itemLink = "\124cffffffff\124Hitem:8411:0:0:0:0:0:0:0:0\124h[Lung Juice Cocktail]\124h\124r" },
+    { name = 'Rage of Ages', itemLink = "\124cffffffff\124Hitem:8410:0:0:0:0:0:0:0:0\124h[R.O.I.D.S.]\124h\124r" },
+    { name = 'Strike of the Scorpok', itemLink = "\124cffffffff\124Hitem:8412:0:0:0:0:0:0:0:0\124h[Ground Scorpok Assay]\124h\124r" },
+    { name = 'Infallible Mind', itemLink = "\124cffffffff\124Hitem:8423:0:0:0:0:0:0:0:0\124h[Cerebral Cortex Compound]\124h\124r" },
+    { name = 'Spiritual Domination', itemLink = "\124cffffffff\124Hitem:8424:0:0:0:0:0:0:0:0\124h[Gizzard Gum]\124h\124r" },
+    { name = 'Spirit of Boar', itemLink = "\124cffffffff\124Hitem:8411:0:0:0:0:0:0:0:0\124h[Lung Juice Cocktail]\124h\124r" },
 
-    { id = 13, name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
+    { name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
 
-    { id = 14, name = 'Juju Power', itemLink = "\124cffffffff\124Hitem:12451:0:0:0:0:0:0:0:0\124h[Juju Power]\124h\124r" },
-    { id = 15, name = 'Juju Might', itemLink = "\124cffffffff\124Hitem:12460:0:0:0:0:0:0:0:0\124h[Juju Might]\124h\124r" },
-    { id = 16, name = 'Juju Ember', itemLink = "\124cffffffff\124Hitem:12455:0:0:0:0:0:0:0:0\124h[Juju Ember]\124h\124r" },
-    { id = 17, name = 'Juju Chill', itemLink = "\124cffffffff\124Hitem:12457:0:0:0:0:0:0:0:0\124h[Juju Chill]\124h\124r" },
+    { name = 'Juju Power', itemLink = "\124cffffffff\124Hitem:12451:0:0:0:0:0:0:0:0\124h[Juju Power]\124h\124r" },
+    { name = 'Juju Might', itemLink = "\124cffffffff\124Hitem:12460:0:0:0:0:0:0:0:0\124h[Juju Might]\124h\124r" },
+    { name = 'Juju Ember', itemLink = "\124cffffffff\124Hitem:12455:0:0:0:0:0:0:0:0\124h[Juju Ember]\124h\124r" },
+    { name = 'Juju Chill', itemLink = "\124cffffffff\124Hitem:12457:0:0:0:0:0:0:0:0\124h[Juju Chill]\124h\124r" },
 
-    { id = 18, name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
+    { name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
 
-    { id = 19, name = 'Armor', itemLink = "\124cffffffff\124Hitem:8951:0:0:0:0:0:0:0:0\124h[Elixir of Greater Defense]\124h\124r" },
-    { id = 20, name = 'Greater Armor', itemLink = "\124cffffffff\124Hitem:13445:0:0:0:0:0:0:0:0\124h[Elixir of Superior Defense]\124h\124r" },
+    { name = 'Armor', itemLink = "\124cffffffff\124Hitem:8951:0:0:0:0:0:0:0:0\124h[Elixir of Greater Defense]\124h\124r" },
+    { name = 'Greater Armor', itemLink = "\124cffffffff\124Hitem:13445:0:0:0:0:0:0:0:0\124h[Elixir of Superior Defense]\124h\124r" },
 
-    { id = 21, name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
+    { name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
 
-    { id = 22, name = 'Elixir of the Mongoose', itemLink = "\124cffffffff\124Hitem:13452:0:0:0:0:0:0:0:0\124h[Elixir of the Mongoose]\124h\124r" },
-    { id = 23, name = 'Elixir of Giants', itemLink = "\124cffffffff\124Hitem:9206:0:0:0:0:0:0:0:0\124h[Elixir of Giants]\124h\124r" },
-    { id = 24, name = 'Winterfall Firewater', itemLink = "\124cffffffff\124Hitem:12820:0:0:0:0:0:0:0:0\124h[Winterfall Firewater]\124h\124r" },
-    { id = 25, name = 'Greater Agility', itemLink = "\124cffffffff\124Hitem:9187:0:0:0:0:0:0:0:0\124h[Elixir of Greater Agility]\124h\124r" },
-    { id = 26, name = 'Health II', itemLink = "\124cffffffff\124Hitem:3825:0:0:0:0:0:0:0:0\124h[Elixir of Fortitude]\124h\124r" },
+    { name = 'Elixir of the Mongoose', itemLink = "\124cffffffff\124Hitem:13452:0:0:0:0:0:0:0:0\124h[Elixir of the Mongoose]\124h\124r" },
+    { name = 'Elixir of Giants', itemLink = "\124cffffffff\124Hitem:9206:0:0:0:0:0:0:0:0\124h[Elixir of Giants]\124h\124r" },
+    { name = 'Winterfall Firewater', itemLink = "\124cffffffff\124Hitem:12820:0:0:0:0:0:0:0:0\124h[Winterfall Firewater]\124h\124r" },
+    { name = 'Greater Agility', itemLink = "\124cffffffff\124Hitem:9187:0:0:0:0:0:0:0:0\124h[Elixir of Greater Agility]\124h\124r" },
+    { name = 'Health II', itemLink = "\124cffffffff\124Hitem:3825:0:0:0:0:0:0:0:0\124h[Elixir of Fortitude]\124h\124r" },
 
-    { id = 27, name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
+    { name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
 
-    { id = 28, name = 'Regeneration', itemLink = "\124cffffffff\124Hitem:20004:0:0:0:0:0:0:0:0\124h[Major Troll's Blood Potion]\124h\124r" },
-    { id = 29, name = 'Gift of Arthas', itemLink = "\124cffffffff\124Hitem:9088:0:0:0:0:0:0:0:0\124h[Gift of Arthas]\124h\124r" },
-    { id = 30, name = 'Mana Regeneration', itemLink = "\124cffffffff\124Hitem:20007:0:0:0:0:0:0:0:0\124h[Mageblood Potion]\124h\124r" },
+    { name = 'Regeneration', itemLink = "\124cffffffff\124Hitem:20004:0:0:0:0:0:0:0:0\124h[Major Troll's Blood Potion]\124h\124r" },
+    { name = 'Gift of Arthas', itemLink = "\124cffffffff\124Hitem:9088:0:0:0:0:0:0:0:0\124h[Gift of Arthas]\124h\124r" },
+    { name = 'Mana Regeneration', itemLink = "\124cffffffff\124Hitem:20007:0:0:0:0:0:0:0:0\124h[Mageblood Potion]\124h\124r" },
 
-    { id = 31, name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
+    { name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
 
-    { id = 32, name = 'Greater Arcane Elixir', itemLink = "\124cffffffff\124Hitem:13454:0:0:0:0:0:0:0:0\124h[Greater Arcane Elixir]\124h\124r" },
-    { id = 33, name = 'Shadow Power', itemLink = "\124cffffffff\124Hitem:9264:0:0:0:0:0:0:0:0\124h[Elixir of Shadow Power]\124h\124r" }, --Elixir of Shadow Power
-    { id = 34, name = 'Greater Firepower', itemLink = "\124cffffffff\124Hitem:21546:0:0:0:0:0:0:0:0\124h[Elixir of Greater Firepower]\124h\124r" },
-    { id = 35, name = 'Frost Power', itemLink = "\124cffffffff\124Hitem:17708:0:0:0:0:0:0:0:0\124h[Elixir of Frost Power]\124h\124r" },
+    { name = 'Greater Arcane Elixir', itemLink = "\124cffffffff\124Hitem:13454:0:0:0:0:0:0:0:0\124h[Greater Arcane Elixir]\124h\124r" },
+    { name = 'Shadow Power', itemLink = "\124cffffffff\124Hitem:9264:0:0:0:0:0:0:0:0\124h[Elixir of Shadow Power]\124h\124r" }, --Elixir of Shadow Power
+    { name = 'Greater Firepower', itemLink = "\124cffffffff\124Hitem:21546:0:0:0:0:0:0:0:0\124h[Elixir of Greater Firepower]\124h\124r" },
+    { name = 'Frost Power', itemLink = "\124cffffffff\124Hitem:17708:0:0:0:0:0:0:0:0\124h[Elixir of Frost Power]\124h\124r" },
 
-    { id = 36, name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
+    { name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
 
-    { id = 37, name = 'Crystal Ward', itemLink = "\124cffffffff\124Hitem:11564:0:0:0:0:0:0:0:0\124h[Crystal Ward]\124h\124r" },
-    { id = 38, name = 'Crystal Spire', itemLink = "\124cffffffff\124Hitem:11567:0:0:0:0:0:0:0:0\124h[Crystal Spire]\124h\124r" },
+    { name = 'Crystal Ward', itemLink = "\124cffffffff\124Hitem:11564:0:0:0:0:0:0:0:0\124h[Crystal Ward]\124h\124r" },
+    { name = 'Crystal Spire', itemLink = "\124cffffffff\124Hitem:11567:0:0:0:0:0:0:0:0\124h[Crystal Spire]\124h\124r" },
 
-    { id = 30, name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
+    { name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
 
-    { id = 40, name = 'Arcane Protection', itemLink = "\124cffffffff\124Hitem:13461:0:0:0:0:0:0:0:0\124h[Greater Arcane Protection Potion]\124h\124r" }, --Greater
-    { id = 41, name = 'Fire Protection', itemLink = "\124cffffffff\124Hitem:13457:0:0:0:0:0:0:0:0\124h[Greater Fire Protection Potion]\124h\124r" }, --Greater
-    { id = 42, name = 'Frost Protection', itemLink = "\124cffffffff\124Hitem:13456:0:0:0:0:0:0:0:0\124h[Greater Frost Protection Potion]\124h\124r" }, --Greater
-    { id = 43, name = 'Nature Protection', itemLink = "\124cffffffff\124Hitem:13458:0:0:0:0:0:0:0:0\124h[Greater Nature Protection Potion]\124h\124r" }, --Greater
-    { id = 44, name = 'Shadow Protection', itemLink = "\124cffffffff\124Hitem:13459:0:0:0:0:0:0:0:0\124h[Greater Shadow Protection Potion]\124h\124r" }, --Greater
+    { name = 'Arcane Protection', itemLink = "\124cffffffff\124Hitem:13461:0:0:0:0:0:0:0:0\124h[Greater Arcane Protection Potion]\124h\124r" }, --Greater
+    { name = 'Fire Protection', itemLink = "\124cffffffff\124Hitem:13457:0:0:0:0:0:0:0:0\124h[Greater Fire Protection Potion]\124h\124r" }, --Greater
+    { name = 'Frost Protection', itemLink = "\124cffffffff\124Hitem:13456:0:0:0:0:0:0:0:0\124h[Greater Frost Protection Potion]\124h\124r" }, --Greater
+    { name = 'Nature Protection', itemLink = "\124cffffffff\124Hitem:13458:0:0:0:0:0:0:0:0\124h[Greater Nature Protection Potion]\124h\124r" }, --Greater
+    { name = 'Shadow Protection', itemLink = "\124cffffffff\124Hitem:13459:0:0:0:0:0:0:0:0\124h[Greater Shadow Protection Potion]\124h\124r" }, --Greater
 
-    { id = 45, name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
+    { name = 'separator', itemLink = '\124cffffffff\124Hitem:13513:0:0:0:0:0:0:0:0\124h[Flask of Chromatic Resistance]\124h\124r' },
 
-    { id = 46, name = 'Mana Regeneration', itemLink = "\124cffffffff\124Hitem:13931:0:0:0:0:0:0:0:0\124h[Nightfin Soup]\124h\124r" }, -- conflict with mageblood
-    { id = 47, name = 'Increased Intellect', itemLink = "\124cffffffff\124Hitem:18254:0:0:0:0:0:0:0:0\124h[Runn Tum Tuber Surprise]\124h\124r" },
-    { id = 48, name = 'Increased Stamina', itemLink = "\124cffffffff\124Hitem:21023:0:0:0:0:0:0:0:0\124h[Dirge's Kickin' Chimaerok Chops]\124h\124r" },
-    { id = 49, name = 'Increased Stamina', itemLink = "\124cffffffff\124Hitem:51717:0:0:0:0:0:0:0:0\124h[Magic Mushroom]\124h\124r" },
-    { id = 50, name = 'Fizzy Energy Drink', itemLink = "\124cffffffff\124Hitem:23176:0:0:0:0:0:0:0:0\124h[Fizzy Energy Drink]\124h\124r" },
-    { id = 51, name = 'Blessed Sunfruit Juice', itemLink = "\124cffffffff\124Hitem:13813:0:0:0:0:0:0:0:0\124h[Blessed Sunfruit Juice]\124h\124r" },
-    { id = 52, name = 'Increased Agility', itemLink = "\124cffffffff\124Hitem:13928:0:0:0:0:0:0:0:0\124h[Grilled Squid]\124h\124r" },
-    { id = 53, name = 'Increased Agility', itemLink = "\124cffffffff\124Hitem:51711:0:0:0:0:0:0:0:0\124h[Sweet Mountain Berry]\124h\124r" },
-    { id = 54, name = 'Well Fed', itemLink = "\124cffffffff\124Hitem:20452:0:0:0:0:0:0:0:0\124h[Smoked Desert Dumplings]\124h\124r" }, -- ???
-    { id = 55, name = 'Dragonbreath Chili', itemLink = "\124cffffffff\124Hitem:12217:0:0:0:0:0:0:0:0\124h[Dragonbreath Chili]\124h\124r" },
-    { id = 56, name = 'Rumsey Rum Black Label', itemLink = "\124cffffffff\124Hitem:21151:0:0:0:0:0:0:0:0\124h[Rumsey Rum Black Label]\124h\124r" },
-    { id = 57, name = 'Gordok Green Grog', itemLink = "\124cff1eff00\124Hitem:18269:0:0:0:0:0:0:0:0\124h[Gordok Green Grog]\124h\124r" },
+    { name = 'Mana Regeneration', itemLink = "\124cffffffff\124Hitem:13931:0:0:0:0:0:0:0:0\124h[Nightfin Soup]\124h\124r" }, -- conflict with mageblood
+    { name = 'Increased Intellect', itemLink = "\124cffffffff\124Hitem:18254:0:0:0:0:0:0:0:0\124h[Runn Tum Tuber Surprise]\124h\124r" },
+    { name = 'Increased Stamina', itemLink = "\124cffffffff\124Hitem:21023:0:0:0:0:0:0:0:0\124h[Dirge's Kickin' Chimaerok Chops]\124h\124r" },
+    { name = 'Increased Stamina', itemLink = "\124cffffffff\124Hitem:51717:0:0:0:0:0:0:0:0\124h[Magic Mushroom]\124h\124r" },
+    { name = 'Fizzy Energy Drink', itemLink = "\124cffffffff\124Hitem:23176:0:0:0:0:0:0:0:0\124h[Fizzy Energy Drink]\124h\124r" },
+    { name = 'Blessed Sunfruit Juice', itemLink = "\124cffffffff\124Hitem:13813:0:0:0:0:0:0:0:0\124h[Blessed Sunfruit Juice]\124h\124r" },
+    { name = 'Increased Agility', itemLink = "\124cffffffff\124Hitem:13928:0:0:0:0:0:0:0:0\124h[Grilled Squid]\124h\124r" },
+    { name = 'Increased Agility', itemLink = "\124cffffffff\124Hitem:51711:0:0:0:0:0:0:0:0\124h[Sweet Mountain Berry]\124h\124r" },
+    { name = 'Well Fed', itemLink = "\124cffffffff\124Hitem:20452:0:0:0:0:0:0:0:0\124h[Smoked Desert Dumplings]\124h\124r" }, -- ???
+    { name = 'Dragonbreath Chili', itemLink = "\124cffffffff\124Hitem:12217:0:0:0:0:0:0:0:0\124h[Dragonbreath Chili]\124h\124r" },
+    { name = 'Rumsey Rum Black Label', itemLink = "\124cffffffff\124Hitem:21151:0:0:0:0:0:0:0:0\124h[Rumsey Rum Black Label]\124h\124r" },
+    { name = 'Gordok Green Grog', itemLink = "\124cff1eff00\124Hitem:18269:0:0:0:0:0:0:0:0\124h[Gordok Green Grog]\124h\124r" },
 
 }
+
+for index, data in next, GB.consumables do
+    data.id = index
+end
 
 -- Elemental Sharpening Stone
 -- Consecrated Sharpening Stone
@@ -421,14 +426,18 @@ function GB.GetUnitBuff(unit, i)
 
     GBToolTip:SetOwner(GBToolTip, "ANCHOR_NONE");
     --NeedFrameTooltipTextLeft1:SetText("");
-    GBToolTip:SetUnitBuff(unit, i);
+    --if GBToolTip:SetUnitBuff(unit, i) then
 
-    if GBToolTipTextLeft1:GetText() then
-        local duration = GetPlayerBuffTimeLeft(GetPlayerBuff(-1 + i, "HELPFUL|HARMFUL|PASSIVE"))
-        return GB.trim(GBToolTipTextLeft1:GetText()), duration
-    else
-        return false, 0
-    end
+        if GBToolTipTextLeft1:GetText() then
+            local duration = GetPlayerBuffTimeLeft(GetPlayerBuff(-1 + i, "HELPFUL|HARMFUL|PASSIVE"))
+            return GB.trim(GBToolTipTextLeft1:GetText()), duration
+        else
+            return false, 0
+        end
+
+    --else
+    --    return false, 0
+    --end
 end
 
 function GB.trim(s)
