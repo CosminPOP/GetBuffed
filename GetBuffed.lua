@@ -37,6 +37,9 @@ GB.RaidBuffs = {}
 GB:SetScript("OnEvent", function()
     if event then
         if event == "ADDON_LOADED" and arg1 == 'GetBuffed' then
+            if not GB_BUFFS then
+                GB_BUFFS = {}
+            end
             getglobal('GBMain'):SetBackdropColor(0, 0, 0, .5)
             getglobal('GBSettings'):SetBackdropColor(0, 0, 0, .5)
             GB.cacheItems()
