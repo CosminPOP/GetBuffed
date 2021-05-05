@@ -1,0 +1,312 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/..\FrameXML\UI.xsd">
+    <Script file="GetBuffed.lua"/>
+
+    <GameTooltip name="GBToolTip" inherits="GameTooltipTemplate" parent="UIParent" hidden="true"/>
+
+
+    <Frame name="GBSettingsConsumable" virtual="true">
+        <Size>
+            <AbsDimension x="184" y="21"/>
+        </Size>
+        <Anchors>
+            <Anchor point="TOPLEFT">
+                <Offset>
+                    <AbsDimension x="8" y="-40"/>
+                </Offset>
+            </Anchor>
+        </Anchors>
+        <Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" tile="true" edgeSize="1">
+            <Color a=".3"/>
+        </Backdrop>
+        <Layers>
+            <Layer level="OVERLAY">
+            </Layer>
+        </Layers>
+        <Frames>
+
+            <Button name="$parentItem" inherits="UIPanelButtonTemplate" text="">
+                <NormalTexture file="Interface\Icons\inv_staff_20"/>
+                <PushedTexture inherits=""/>
+                <HighlightTexture inherits=""/>
+                <Size>
+                    <AbsDimension x="20" y="20"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="LEFT">
+                        <Offset>
+                            <AbsDimension x="-3" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <FontString name="$parentName" justifyH="LEFT" inherits="GameFontNormal"
+                                    text="[longest item name ever ever ever ever ever ever]" hidden="false">
+                            <Anchors>
+                                <Anchor point="LEFT">
+                                    <Offset>
+                                        <AbsDimension x="23" y="0"/>
+                                    </Offset>
+                                </Anchor>
+                            </Anchors>
+                            <Size>
+                                <AbsDimension x="133" y="20"/>
+                            </Size>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Scripts>
+                </Scripts>
+            </Button>
+
+            <CheckButton name="$parentWatchBuff">
+                <Size>
+                    <AbsDimension x="20" y="20"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="RIGHT">
+                        <Offset>
+                            <AbsDimension x="0" y="-1"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        markWatched(this:GetID(), this:GetChecked())
+                    </OnClick>
+                </Scripts>
+                <NormalTexture file="Interface\Buttons\UI-CheckBox-Up"/>
+                <PushedTexture file="Interface\Buttons\UI-CheckBox-Down"/>
+                <HighlightTexture file="Interface\Buttons\UI-CheckBox-Highlight" alphaMode="ADD"/>
+                <CheckedTexture file="Interface\Buttons\UI-CheckBox-Check"/>
+                <DisabledCheckedTexture file="Interface\Buttons\UI-CheckBox-Check-Disabled"/>
+            </CheckButton>
+
+        </Frames>
+        <Scripts>
+            <OnEnter>
+            </OnEnter>
+            <OnLeave>
+            </OnLeave>
+        </Scripts>
+    </Frame>
+
+    <Frame name="GBStatusConsumable" virtual="true">
+        <Size>
+            <AbsDimension x="192" y="22"/>
+        </Size>
+        <Anchors>
+            <Anchor point="TOPLEFT">
+                <Offset>
+                    <AbsDimension x="8" y="-40"/>
+                </Offset>
+            </Anchor>
+        </Anchors>
+        <Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" tile="true" edgeSize="1">
+            <Color a=".3"/>
+        </Backdrop>
+        <Layers>
+            <Layer level="OVERLAY">
+            </Layer>
+        </Layers>
+        <Frames>
+            <Button name="$parentItem" inherits="UIPanelButtonTemplate" text="">
+                <NormalTexture file="Interface\Icons\inv_staff_20"/>
+                <PushedTexture inherits=""/>
+                <HighlightTexture inherits=""/>
+                <Size>
+                    <AbsDimension x="22" y="22"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="LEFT">
+                        <Offset>
+                            <AbsDimension x="-3" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Layers>
+                    <Layer level="OVERLAY">
+                        <FontString name="$parentName" justifyH="LEFT" inherits="GameFontNormal"
+                                    text="[longest item name ever ever ever ever ever ever]" hidden="false">
+                            <Anchors>
+                                <Anchor point="LEFT">
+                                    <Offset>
+                                        <AbsDimension x="23" y="0"/>
+                                    </Offset>
+                                </Anchor>
+                            </Anchors>
+                            <Size>
+                                <AbsDimension x="163" y="20"/>
+                            </Size>
+                        </FontString>
+                        <FontString name="$parentCount" justifyH="RIGHT" inherits="NumberFontNormal"
+                                    text="6" >
+                            <Anchors>
+                                <Anchor point="BOTTOMRIGHT">
+                                    <Offset>
+                                        <AbsDimension x="-2" y="-2"/>
+                                    </Offset>
+                                </Anchor>
+                            </Anchors>
+                            <Size>
+                                <AbsDimension x="20" y="20"/>
+                            </Size>
+                        </FontString>
+                    </Layer>
+                </Layers>
+                <Scripts>
+                    <OnClick>
+                        GBUseConsumable_OnClick(this:GetID())
+                    </OnClick>
+                </Scripts>
+            </Button>
+        </Frames>
+        <Scripts>
+            <OnEnter>
+            </OnEnter>
+            <OnLeave>
+            </OnLeave>
+        </Scripts>
+    </Frame>
+
+    <Frame name="GBMain" hidden="false" toplevel="true" enableMouse="true" parent="UIParent" movable="true">
+        <Size>
+            <AbsDimension x="200" y="400"/>
+        </Size>
+        <Anchors>
+            <Anchor point="CENTER">
+                <Offset x="0" y="0"/>
+            </Anchor>
+        </Anchors>
+        <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background"
+                  tile="false">
+        </Backdrop>
+        <Layers>
+            <Layer level="OVERLAY">
+                <FontString name="$parentTitle" inherits="GameFontNormal" text="Buff Status">
+                    <Anchors>
+                        <Anchor point="TOP">
+                            <Offset>
+                                <AbsDimension x="0" y="-3"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+
+            <Button name="GBSettingButton" framstrata="HIGH" inherits="UIPanelButtonTemplate" hidden="false"
+                    text="S">
+                <Size>
+                    <AbsDimension x="20" y="20"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPRIGHT">
+                        <Offset>
+                            <AbsDimension x="-1" y="1"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        GBSettingsButton_OnClick();
+                    </OnClick>
+                </Scripts>
+            </Button>
+
+        </Frames>
+        <Scripts>
+            <OnLoad>
+                this:RegisterForDrag("LeftButton");
+                this:SetMovable(1);
+                this:SetUserPlaced(true);
+            </OnLoad>
+            <OnDragStart>
+                this:StartMoving();
+                this.isMoving = true;
+            </OnDragStart>
+            <OnDragStop>
+                this:StopMovingOrSizing();
+                this.isMoving = false;
+            </OnDragStop>
+        </Scripts>
+    </Frame>
+
+    <Frame name="GBSettings" hidden="true" toplevel="true" enableMouse="true" parent="UIParent" movable="true">
+        <Size>
+            <AbsDimension x="600" y="500"/>
+        </Size>
+        <Anchors>
+            <Anchor point="CENTER">
+                <Offset x="0" y="0"/>
+            </Anchor>
+        </Anchors>
+        <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background"
+                  tile="false">
+        </Backdrop>
+        <Layers>
+            <Layer level="OVERLAY">
+                <FontString name="$parentTitle" inherits="GameFontNormal" text="Get Buffed Settings">
+                    <Anchors>
+                        <Anchor point="TOP">
+                            <Offset>
+                                <AbsDimension x="0" y="-3"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Button name="GBSettingClearAllButton" framstrata="HIGH" inherits="UIPanelButtonTemplate" hidden="false"
+                    text="Clear all">
+                <Size>
+                    <AbsDimension x="120" y="20"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="BOTTOMRIGHT">
+                        <Offset>
+                            <AbsDimension x="-1" y="3"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        GBClear_All_OnClick();
+                    </OnClick>
+                </Scripts>
+            </Button>
+
+            <Button name="GBSettingsCloseButton" inherits="UIPanelCloseButton">
+                <Size>
+                    <AbsDimension x="25" y="25"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPRIGHT">
+                        <Offset>
+                            <AbsDimension x="4" y="4"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+            </Button>
+        </Frames>
+        <Scripts>
+            <OnLoad>
+                this:RegisterForDrag("LeftButton");
+                this:SetMovable(1);
+                this:SetUserPlaced(true);
+            </OnLoad>
+            <OnDragStart>
+                this:StartMoving();
+                this.isMoving = true;
+            </OnDragStart>
+            <OnDragStop>
+                this:StopMovingOrSizing();
+                this.isMoving = false;
+            </OnDragStop>
+        </Scripts>
+    </Frame>
+
+</Ui>
