@@ -42,7 +42,7 @@
                 <Layers>
                     <Layer level="OVERLAY">
                         <FontString name="$parentName" justifyH="LEFT" inherits="GameFontNormal"
-                                    text="[longest item name ever ever ever ever ever ever]" hidden="false">
+                                    text="Loading item..." hidden="false">
                             <Anchors>
                                 <Anchor point="LEFT">
                                     <Offset>
@@ -128,7 +128,7 @@
                 <Layers>
                     <Layer level="OVERLAY">
                         <FontString name="$parentName" justifyH="LEFT" inherits="GameFontNormal"
-                                    text="[longest item name ever ever ever ever ever ever]" hidden="false">
+                                    text="Loading item..." hidden="false">
                             <Anchors>
                                 <Anchor point="LEFT">
                                     <Offset>
@@ -261,7 +261,7 @@
         </Layers>
         <Frames>
             <Button name="GBSettingClearAllButton" framstrata="HIGH" inherits="UIPanelButtonTemplate" hidden="false"
-                    text="Clear all">
+                    text="Reset">
                 <Size>
                     <AbsDimension x="120" y="20"/>
                 </Size>

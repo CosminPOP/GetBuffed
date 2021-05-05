@@ -6,7 +6,7 @@ GBScanner:SetScript("OnShow", function()
     this.startTime = GetTime();
 end)
 GBScanner:SetScript("OnUpdate", function()
-    local plus = 5
+    local plus = 3
     local gt = GetTime() * 1000
     local st = (this.startTime + plus) * 1000
     if gt >= st then
@@ -39,16 +39,35 @@ GB:SetScript("OnEvent", function()
         if event == "ADDON_LOADED" and arg1 == 'GetBuffed' then
             getglobal('GBMain'):SetBackdropColor(0, 0, 0, .5)
             getglobal('GBSettings'):SetBackdropColor(0, 0, 0, .5)
-            --GB.populateSettings()
-            GB.checkMyBuffs()
+            GB.cacheItems()
             GBScanner:Show()
         end
     end
 end)
 
+function GB.cacheItems()
+    for _, data in next, GB.consumables do
+
+        local _, _, itemLink = string.find(data.itemLink, "(item:%d+:%d+:%d+:%d+)");
+
+        local linkEx = string.split(itemLink, ':')
+        data.id = tonumber(linkEx[2])
+
+        local name, _, _, _, _, _, _, _, tex = GetItemInfo(itemLink)
+
+        GameTooltip:SetHyperlink(itemLink)
+        GameTooltip:Show()
+        GameTooltip:Hide()
+    end
+
+    GB.checkMyBuffs()
+end
+
 GB.settingsFrames = {}
 
 function GB.populateSettings()
+
+    GB.cacheItems()
 
     local settingsBuffs = 0
 
@@ -76,37 +95,37 @@ function GB.populateSettings()
             left = 405
             top = -22 * (i - secondRowLimit) - 22
         end
-        if not GB.settingsFrames[i] then
-            GB.settingsFrames[i] = CreateFrame('Frame', 'sBuff' .. i, getglobal("GBSettings"), 'GBSettingsConsumable')
+        if not GB.settingsFrames[data.id] then
+            GB.settingsFrames[data.id] = CreateFrame('Frame', 'sBuff' .. data.id, getglobal("GBSettings"), 'GBSettingsConsumable')
         end
 
-        GB.settingsFrames[i]:SetPoint("TOPLEFT", getglobal("GBSettings"), "TOPLEFT", left, top)
+        GB.settingsFrames[data.id]:SetPoint("TOPLEFT", getglobal("GBSettings"), "TOPLEFT", left, top)
         if data.name == 'separator' then
-            GB.settingsFrames[i]:Hide()
+            GB.settingsFrames[data.id]:Hide()
         else
-            GB.settingsFrames[i]:Show()
+            GB.settingsFrames[data.id]:Show()
         end
 
-        getglobal("sBuff" .. i .. "WatchBuff"):SetID(data.id)
-        getglobal("sBuff" .. i .. "WatchBuff"):SetChecked(GB_BUFFS[data.id] == '1')
+        getglobal("sBuff" .. data.id .. "WatchBuff"):SetID(data.id)
+        getglobal("sBuff" .. data.id .. "WatchBuff"):SetChecked(GB_BUFFS[data.id] == '1')
 
         local _, _, itemLink = string.find(data.itemLink, "(item:%d+:%d+:%d+:%d+)");
         local name, _, _, _, _, _, _, _, tex = GetItemInfo(itemLink)
 
         if name then
 
-            getglobal("sBuff" .. i .. 'Item'):SetNormalTexture(tex)
-            getglobal("sBuff" .. i .. 'Item'):SetPushedTexture(tex)
-            GB.addButtonOnEnterTooltip(getglobal("sBuff" .. i .. "Item"), data.itemLink)
-            GB.addButtonOnEnterTooltip(getglobal("sBuff" .. i .. "WatchBuff"), data.itemLink)
+            getglobal("sBuff" .. data.id .. 'Item'):SetNormalTexture(tex)
+            getglobal("sBuff" .. data.id .. 'Item'):SetPushedTexture(tex)
+            GB.addButtonOnEnterTooltip(getglobal("sBuff" .. data.id .. "Item"), data.itemLink)
+            GB.addButtonOnEnterTooltip(getglobal("sBuff" .. data.id .. "WatchBuff"), data.itemLink)
 
             if GB_BUFFS[data.id] == '1' then
                 settingsBuffs = settingsBuffs + 1
                 --SetDesaturation(getglobal("sBuff" .. i .. 'Item'):GetNormalTexture(), 0)
-                getglobal("sBuff" .. i .. 'ItemName'):SetText('|cffffffff' .. name)
+                getglobal("sBuff" .. data.id .. 'ItemName'):SetText('|cffffffff' .. name)
             else
                 --SetDesaturation(getglobal("sBuff" .. i .. 'Item'):GetNormalTexture(), 1)
-                getglobal("sBuff" .. i .. 'ItemName'):SetText('|cff888888' .. name)
+                getglobal("sBuff" .. data.id .. 'ItemName'):SetText('|cff888888' .. name)
             end
 
         end
@@ -132,15 +151,18 @@ function GB.checkMyBuffs()
     getglobal('GBMain'):SetHeight(20)
     getglobal('GBMain'):SetAlpha(0.5)
 
-    for index in next, GB.consumables do
-        if GB_BUFFS[index] and GB_BUFFS[index] == '1' then
-            foundBuffs[index] = 0
+    for _, data in next, GB.consumables do
+        if GB_BUFFS[data.id] and GB_BUFFS[data.id] == '1' then
+            foundBuffs[data.id] = 0
             watchedBuffs = watchedBuffs + 1
         end
     end
 
+    --DEFAULT_CHAT_FRAME:AddMessage('----------')
+
     for j = 0, 32 do
-        local buffName, duration = GB.GetUnitBuff('player', j)
+        local buffName, duration = GB.GetUnitBuff(j)
+
         if buffName then
             for _, data in next, GB.consumables do
                 if buffName == data.name then
@@ -148,6 +170,7 @@ function GB.checkMyBuffs()
                         if GB_BUFFS[data.id] == '1' then
                             currentBuffs = currentBuffs + 1
                             foundBuffs[data.id] = duration
+                            --DEFAULT_CHAT_FRAME:AddMessage(buffName .. ' ' .. duration)
                         end
                     end
                 end
@@ -161,18 +184,18 @@ function GB.checkMyBuffs()
 
     local index = 0
     local timeThreshold = 3 * 60
-    for i, data in next, foundBuffs do
+    for id, data in next, foundBuffs do
         if data == 0 or data < timeThreshold then
             index = index + 1
 
-            if not GBScanner.frames[index] then
-                GBScanner.frames[index] = CreateFrame('Frame', 'cBuff' .. index, getglobal("GBMain"), 'GBStatusConsumable')
+            if not GBScanner.frames[id] then
+                GBScanner.frames[id] = CreateFrame('Frame', 'cBuff' .. id, getglobal("GBMain"), 'GBStatusConsumable')
             end
 
-            GBScanner.frames[index]:SetPoint("TOPLEFT", getglobal("GBMain"), "TOPLEFT", 5, -23 * index - 5)
-            GBScanner.frames[index]:Show()
+            GBScanner.frames[id]:SetPoint("TOPLEFT", getglobal("GBMain"), "TOPLEFT", 5, -23 * index - 5)
+            GBScanner.frames[id]:Show()
 
-            local _, _, itemLink = string.find(GB.consumables[i].itemLink, "(item:%d+:%d+:%d+:%d+)");
+            local _, _, itemLink = string.find(GB.linkFromId(id), "(item:%d+:%d+:%d+:%d+)");
             local name, _, _, _, _, _, _, _, tex = GetItemInfo(itemLink)
 
             if name then
@@ -196,17 +219,17 @@ function GB.checkMyBuffs()
                 end
 
                 if data < timeThreshold and data > 0 then
-                    getglobal("cBuff" .. index .. 'ItemName'):SetText('|cffdddddd(|cffff8888' .. math.floor(data / 60) .. 'm|cffdddddd)' .. name)
+                    getglobal("cBuff" .. id .. 'ItemName'):SetText('|cffdddddd(|cffff8888' .. math.floor(data / 60) .. 'm|cffdddddd)' .. name)
                 else
-                    getglobal("cBuff" .. index .. 'ItemName'):SetText('|cffdddddd' .. name)
+                    getglobal("cBuff" .. id .. 'ItemName'):SetText('|cffdddddd' .. name)
                 end
-                getglobal("cBuff" .. index .. 'ItemCount'):SetText(itemCount)
+                getglobal("cBuff" .. id .. 'ItemCount'):SetText(itemCount)
 
-                getglobal("cBuff" .. index .. 'Item'):SetID(i)
-                getglobal("cBuff" .. index .. 'Item'):SetNormalTexture(tex)
-                getglobal("cBuff" .. index .. 'Item'):SetPushedTexture(tex)
+                getglobal("cBuff" .. id .. 'Item'):SetID(id)
+                getglobal("cBuff" .. id .. 'Item'):SetNormalTexture(tex)
+                getglobal("cBuff" .. id .. 'Item'):SetPushedTexture(tex)
 
-                GB.addButtonOnEnterTooltip(getglobal("cBuff" .. index .. "Item"), GB.consumables[i].itemLink)
+                GB.addButtonOnEnterTooltip(getglobal("cBuff" .. id .. "Item"), GB.linkFromId(id))
 
                 getglobal('GBMain'):SetHeight(30 + 23 * index)
                 getglobal('GBMain'):SetAlpha(1)
@@ -224,7 +247,7 @@ function markWatched(id, check)
     GB_BUFFS[id] = check and '1' or '0'
     GB.checkMyBuffs()
 
-    local _, _, itemLink = string.find(GB.consumables[id].itemLink, "(item:%d+:%d+:%d+:%d+)");
+    local _, _, itemLink = string.find(GB.linkFromId(id), "(item:%d+:%d+:%d+:%d+)");
     local name = GetItemInfo(itemLink)
 
     if name then
@@ -259,8 +282,9 @@ function GBClear_All_OnClick()
     for _, data in next, GB.consumables do
         i = i + 1
         GB_BUFFS[data.id] = '0'
-        getglobal("sBuff" .. i .. "WatchBuff"):SetChecked(false)
+        getglobal("sBuff" .. data.id .. "WatchBuff"):SetChecked(false)
     end
+    GB_BUFFS = {}
     GB.populateSettings()
     GB.checkMyBuffs()
 end
@@ -276,7 +300,7 @@ function GBUseConsumable_OnClick(id)
 
             if bagItemLink then
 
-                local _, _, itemLink = string.find(GB.consumables[id].itemLink, "(item:%d+:%d+:%d+:%d+)");
+                local _, _, itemLink = string.find(GB.linkFromId(id), "(item:%d+:%d+:%d+:%d+)");
                 local consumableName = GetItemInfo(itemLink)
 
                 if consumableName then
@@ -397,9 +421,18 @@ GB.consumables = {
 
 }
 
-for index, data in next, GB.consumables do
-    data.id = index
+function GB.linkFromId(id)
+
+    for _, data in next, GB.consumables do
+        if data.id == id then
+            return data.itemLink
+        end
+    end
+
+    return 0
+
 end
+
 
 -- Elemental Sharpening Stone
 -- Consecrated Sharpening Stone
@@ -435,22 +468,18 @@ function GB.addButtonOnEnterTooltip(frame, itemLink)
     end)
 end
 
-function GB.GetUnitBuff(unit, i)
-
+function GB.GetUnitBuff(i)
     GBToolTip:SetOwner(GBToolTip, "ANCHOR_NONE");
-    --NeedFrameTooltipTextLeft1:SetText("");
-    --if GBToolTip:SetUnitBuff(unit, i) then
+    GBToolTip:SetUnitBuff('player', i + 1)
 
     if GBToolTipTextLeft1:GetText() then
-        local duration = GetPlayerBuffTimeLeft(GetPlayerBuff(-1 + i, "HELPFUL|HARMFUL|PASSIVE"))
+        local duration = GetPlayerBuffTimeLeft(GetPlayerBuff(i, "HELPFUL|HARMFUL|PASSIVE"))
+        --DEFAULT_CHAT_FRAME:AddMessage(GBToolTipTextLeft1:GetText() .. ' ' .. math.floor(duration/60))
         return GB.trim(GBToolTipTextLeft1:GetText()), duration
     else
         return false, 0
     end
 
-    --else
-    --    return false, 0
-    --end
 end
 
 function GB.trim(s)
