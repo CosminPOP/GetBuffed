@@ -39,7 +39,7 @@ GB:SetScript("OnEvent", function()
         if event == "ADDON_LOADED" and arg1 == 'GetBuffed' then
             getglobal('GBMain'):SetBackdropColor(0, 0, 0, .5)
             getglobal('GBSettings'):SetBackdropColor(0, 0, 0, .5)
-            GB.populateSettings()
+            --GB.populateSettings()
             GB.checkMyBuffs()
             GBScanner:Show()
         end
@@ -93,26 +93,29 @@ function GB.populateSettings()
         local _, _, itemLink = string.find(data.itemLink, "(item:%d+:%d+:%d+:%d+)");
         local name, _, _, _, _, _, _, _, tex = GetItemInfo(itemLink)
 
-        getglobal("sBuff" .. i .. 'Item'):SetNormalTexture(tex)
-        getglobal("sBuff" .. i .. 'Item'):SetPushedTexture(tex)
-        GB.addButtonOnEnterTooltip(getglobal("sBuff" .. i .. "Item"), data.itemLink)
-        GB.addButtonOnEnterTooltip(getglobal("sBuff" .. i .. "WatchBuff"), data.itemLink)
+        if name then
 
+            getglobal("sBuff" .. i .. 'Item'):SetNormalTexture(tex)
+            getglobal("sBuff" .. i .. 'Item'):SetPushedTexture(tex)
+            GB.addButtonOnEnterTooltip(getglobal("sBuff" .. i .. "Item"), data.itemLink)
+            GB.addButtonOnEnterTooltip(getglobal("sBuff" .. i .. "WatchBuff"), data.itemLink)
 
-        if GB_BUFFS[data.id] == '1' then
-            settingsBuffs = settingsBuffs + 1
-            --SetDesaturation(getglobal("sBuff" .. i .. 'Item'):GetNormalTexture(), 0)
-            getglobal("sBuff" .. i .. 'ItemName'):SetText('|cffffffff' .. name)
-        else
-            --SetDesaturation(getglobal("sBuff" .. i .. 'Item'):GetNormalTexture(), 1)
-            getglobal("sBuff" .. i .. 'ItemName'):SetText('|cff888888' .. name)
+            if GB_BUFFS[data.id] == '1' then
+                settingsBuffs = settingsBuffs + 1
+                --SetDesaturation(getglobal("sBuff" .. i .. 'Item'):GetNormalTexture(), 0)
+                getglobal("sBuff" .. i .. 'ItemName'):SetText('|cffffffff' .. name)
+            else
+                --SetDesaturation(getglobal("sBuff" .. i .. 'Item'):GetNormalTexture(), 1)
+                getglobal("sBuff" .. i .. 'ItemName'):SetText('|cff888888' .. name)
+            end
+
         end
 
     end
 
     local separators = 0
     for _, data in next, GB.consumables do
-        separators = separators +  (data.name == 'separator' and 1 or 0)
+        separators = separators + (data.name == 'separator' and 1 or 0)
     end
     getglobal('GBSettingsTitle'):SetText('Get Buffed Settings (' .. settingsBuffs .. '/' .. table.getn(GB.consumables) - separators .. ')')
 
@@ -172,39 +175,43 @@ function GB.checkMyBuffs()
             local _, _, itemLink = string.find(GB.consumables[i].itemLink, "(item:%d+:%d+:%d+:%d+)");
             local name, _, _, _, _, _, _, _, tex = GetItemInfo(itemLink)
 
-            local itemCount = 0
-            for bag = 0, NUM_BAG_SLOTS do
-                for slot = 1, GetContainerNumSlots(bag) do
-                    local bagItemLink = GetContainerItemLink(bag, slot)
-                    if bagItemLink then
-                        local consumableName = GetItemInfo(itemLink)
+            if name then
 
-                        local _, _, bItemLink = string.find(bagItemLink, "(item:%d+:%d+:%d+:%d+)");
-                        local bagItemName = GetItemInfo(bItemLink)
+                local itemCount = 0
+                for bag = 0, NUM_BAG_SLOTS do
+                    for slot = 1, GetContainerNumSlots(bag) do
+                        local bagItemLink = GetContainerItemLink(bag, slot)
+                        if bagItemLink then
+                            local consumableName = GetItemInfo(itemLink)
 
-                        if consumableName == bagItemName then
-                            local _, count = GetContainerItemInfo(bag, slot)
-                            itemCount = itemCount + count
+                            local _, _, bItemLink = string.find(bagItemLink, "(item:%d+:%d+:%d+:%d+)");
+                            local bagItemName = GetItemInfo(bItemLink)
+
+                            if consumableName == bagItemName then
+                                local _, count = GetContainerItemInfo(bag, slot)
+                                itemCount = itemCount + count
+                            end
                         end
                     end
                 end
+
+                if data < timeThreshold and data > 0 then
+                    getglobal("cBuff" .. index .. 'ItemName'):SetText('|cffdddddd(|cffff8888' .. math.floor(data / 60) .. 'm|cffdddddd)' .. name)
+                else
+                    getglobal("cBuff" .. index .. 'ItemName'):SetText('|cffdddddd' .. name)
+                end
+                getglobal("cBuff" .. index .. 'ItemCount'):SetText(itemCount)
+
+                getglobal("cBuff" .. index .. 'Item'):SetID(i)
+                getglobal("cBuff" .. index .. 'Item'):SetNormalTexture(tex)
+                getglobal("cBuff" .. index .. 'Item'):SetPushedTexture(tex)
+
+                GB.addButtonOnEnterTooltip(getglobal("cBuff" .. index .. "Item"), GB.consumables[i].itemLink)
+
+                getglobal('GBMain'):SetHeight(30 + 23 * index)
+                getglobal('GBMain'):SetAlpha(1)
+
             end
-
-            if data < timeThreshold and data > 0 then
-                getglobal("cBuff" .. index .. 'ItemName'):SetText('|cffdddddd(|cffff8888' .. math.floor(data / 60) .. 'm|cffdddddd)' .. name)
-            else
-                getglobal("cBuff" .. index .. 'ItemName'):SetText('|cffdddddd' .. name)
-            end
-            getglobal("cBuff" .. index .. 'ItemCount'):SetText(itemCount)
-
-            getglobal("cBuff" .. index .. 'Item'):SetID(i)
-            getglobal("cBuff" .. index .. 'Item'):SetNormalTexture(tex)
-            getglobal("cBuff" .. index .. 'Item'):SetPushedTexture(tex)
-
-            GB.addButtonOnEnterTooltip(getglobal("cBuff" .. index .. "Item"), GB.consumables[i].itemLink)
-
-            getglobal('GBMain'):SetHeight(30 + 23 * index)
-            getglobal('GBMain'):SetAlpha(1)
 
         end
     end
@@ -220,26 +227,30 @@ function markWatched(id, check)
     local _, _, itemLink = string.find(GB.consumables[id].itemLink, "(item:%d+:%d+:%d+:%d+)");
     local name = GetItemInfo(itemLink)
 
-    if check then
-        getglobal("sBuff" .. id .. 'ItemName'):SetText('|cffffffff' .. name)
-        --SetDesaturation(getglobal("sBuff" .. id .. 'Item'):GetNormalTexture(), 0)
-    else
-        getglobal("sBuff" .. id .. 'ItemName'):SetText('|cff888888' .. name)
-        --SetDesaturation(getglobal("sBuff" .. id .. 'Item'):GetNormalTexture(), 1)
-    end
+    if name then
 
-    local settingsBuffs = 0
-    for _, data in next, GB_BUFFS do
-        if data == '1' then
-            settingsBuffs = settingsBuffs + 1
+        if check then
+            getglobal("sBuff" .. id .. 'ItemName'):SetText('|cffffffff' .. name)
+            --SetDesaturation(getglobal("sBuff" .. id .. 'Item'):GetNormalTexture(), 0)
+        else
+            getglobal("sBuff" .. id .. 'ItemName'):SetText('|cff888888' .. name)
+            --SetDesaturation(getglobal("sBuff" .. id .. 'Item'):GetNormalTexture(), 1)
         end
-    end
 
-    local separators = 0
-    for _, data in next, GB.consumables do
-        separators = separators +  (data.name == 'separator' and 1 or 0)
+        local settingsBuffs = 0
+        for _, data in next, GB_BUFFS do
+            if data == '1' then
+                settingsBuffs = settingsBuffs + 1
+            end
+        end
+
+        local separators = 0
+        for _, data in next, GB.consumables do
+            separators = separators + (data.name == 'separator' and 1 or 0)
+        end
+        getglobal('GBSettingsTitle'):SetText('Get Buffed Settings (' .. settingsBuffs .. '/' .. table.getn(GB.consumables) - separators .. ')')
+
     end
-    getglobal('GBSettingsTitle'):SetText('Get Buffed Settings (' .. settingsBuffs .. '/' .. table.getn(GB.consumables) - separators .. ')')
 
 end
 
@@ -268,19 +279,20 @@ function GBUseConsumable_OnClick(id)
                 local _, _, itemLink = string.find(GB.consumables[id].itemLink, "(item:%d+:%d+:%d+:%d+)");
                 local consumableName = GetItemInfo(itemLink)
 
-                consumable = consumableName
+                if consumableName then
 
-                local _, _, bItemLink = string.find(bagItemLink, "(item:%d+:%d+:%d+:%d+)");
-                local bagItemName = GetItemInfo(bItemLink)
+                    consumable = consumableName
 
-                if consumableName == bagItemName then
-                    bagId = bag
-                    itemSlot = slot
-                    break
+                    local _, _, bItemLink = string.find(bagItemLink, "(item:%d+:%d+:%d+:%d+)");
+                    local bagItemName = GetItemInfo(bItemLink)
+
+                    if consumableName == bagItemName then
+                        bagId = bag
+                        itemSlot = slot
+                        break
+                    end
                 end
-
             end
-
         end
     end
 
@@ -298,6 +310,7 @@ function GBSettingsButton_OnClick()
     if getglobal('GBSettings'):IsVisible() then
         getglobal('GBSettings'):Hide()
     else
+        GB.populateSettings()
         getglobal('GBSettings'):Show()
     end
 end
@@ -428,12 +441,12 @@ function GB.GetUnitBuff(unit, i)
     --NeedFrameTooltipTextLeft1:SetText("");
     --if GBToolTip:SetUnitBuff(unit, i) then
 
-        if GBToolTipTextLeft1:GetText() then
-            local duration = GetPlayerBuffTimeLeft(GetPlayerBuff(-1 + i, "HELPFUL|HARMFUL|PASSIVE"))
-            return GB.trim(GBToolTipTextLeft1:GetText()), duration
-        else
-            return false, 0
-        end
+    if GBToolTipTextLeft1:GetText() then
+        local duration = GetPlayerBuffTimeLeft(GetPlayerBuff(-1 + i, "HELPFUL|HARMFUL|PASSIVE"))
+        return GB.trim(GBToolTipTextLeft1:GetText()), duration
+    else
+        return false, 0
+    end
 
     --else
     --    return false, 0
